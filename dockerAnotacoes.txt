@@ -4,18 +4,23 @@ Curso Docker
 
 -> docker container ls || docker ps
      - Lista os containers ativos, com "ls -a" lista todos ja executados
+
 -> docker run (nome)
      -  Roda um container, exemplo: docker run httpd
      - Para passar argumentos exemplo: 
 	docker run -d -p 81:80 --name meu_apache httpd
      - Onde -d é detached, -p é porta, --name nomeia da sua forma, seguido da imagem, nesse caso, nomeei como meu_apache rodando na minha porta 81 local.
      - tem o -it que abre tela interativa tambem.
+
 -> docker pull (imagem)
      - Baixa a imagem do hub do docker, exemplo git pull python
+
 -> docker images
      - Lista imagens criadas ou baixadas no PC
+
 -> docker build .
      - Builda a imagem criada com base no DockerFile
+
 -> DockerFile exemplo:
 	FROM node
 
@@ -30,49 +35,66 @@ Curso Docker
 	EXPOSE 3000
 
 	CMD ["node", "app.js"]
+
 -> flag --help
     - exemplo: docker run --help, para auxiliar na procura dos comandos.
+
 -> docker tag <id> <nome_novo>
     - exemplo: docker tag 5a9e26c30b4b meu_apache2
+
 -> criando tag com docker tag <id> <nome_novo>: <nome_tag>
     - exemplo: docker tag 5a9e26c30b4b meu_apache2:versao1 
     - para usar a tag, docker pull meu_apache2:versao1, ou sem o :<tag> pega a ultima.
+
 -> criando build Nomeado.
     - exemplo: docker build -t meuNodeNomeado .
     - onde -t da a brecha para por o nome e o ponto ( . ) para mostrar qu DockerFile esta na raiz -t <nome> .
+
 -> Rodar container com iteratividade
     - docker start -i <container>
+
 -> Remover imagem do nosso pc
     - docker rmi <imagem> / -f (força remoção)
+
 -> Remover containers do nosso pc que nao estao sendo usados
    - docker system prune
+
 -> Remover container apos utilização. Remove assim que stopa o mesmo
    - docker run --rm <container>
+
 -> Copiando arquivos entre containers (entre um path e outro [container -> diretorio || diretorio -> container])
    - docker cp <caminho Fonte do Arquivo> <caminho Destino do Arquivo>
    - Exemplo: docker cp nodeMarcelo:/src/app.js ./copia/
+
 -> Verificar processamento do container
    - Exemplo: docker top <container>
+
 -> Verificar / Inspecionar dados de um container
    - Exemplo: docker inspect <container>
+
 -> Verificar processamento do docker
    - Exemplo: docker stats <container>
 
 -> Autenticação no terminal, enviar imagens via hub (docker.hub)
    - Exemplo: docker login
 	    username e password
+
 -> Logout no hub (docker,hub)
    - Exemplo: docker logout
+
 -> Enviando imagens para o Docker Hub
     - Exemplo: docker push <imagem> (rodar build antes: docker build -t marcelo/nodeMarcelo).
 	     docker push marcelo/nodeMarcelo (nome da imagem deve ser o mesmo do repositorio).
+
 -> Baixando imagens pelo o Docker Hub
    - Exemplo: docker pull <imagem> || docker pull marcelo/nodeMarcelo
+
 -> Atualizando imagens para o Docker Hub
    - Primeiro fazemos o build trocando a tag da imagem
    - Depois fazemos um push novamente para o repositorio, dessa forma nada sera sobreescrito.
    - Exemplo: docker build -t marcelo/nodeMarcelo:v001 .
 	    docker push marcelo/nodeMarcelo:v001
+
 -> Baixar e utilizar a imagem
     - Exemplo: docker pull <imagem>
 	     docker run <imagem>
@@ -90,6 +112,32 @@ Curso Docker
     - Nomeado (named): Volumes com nomes, faceis de saber o que é e de usar
     - Bind Mount: forma de salvar dados na nossa maquina sem usar o gerenciamento do docker.
 
+-> docker volume ls
+    - Lista todos os volumes do nosso ambiente
+
+-> Volume Anonimo
+    - docker run -v /data (onde /data sera o diretorio que contem o volume anonimo).
+        exemplo: docker run -d -p 81:80 --name phpmessages_container --rm -v /data phpmessages
+    - docker inspect phpmessages_container
+        Para verificar volume atrelado ao container
+
+-> Volume Nomeado
+    - docker run -v nomeDoVolume:/data
+        exemplo:  docker run -d -p 81:80 --name phpmessages_container -v phpvolume:/var/www/html/messages --rm phpmessages (lembrando que o diretorio do volume deve ser o mesmo do WORKDIR [/var/www/html/])
+
+-> Volume Bind Mount
+    - Cria o volume na maquina host que esta executando o docker (nao criamos um volume em si, apontamos um diretorio).
+    - docker run /dir/data:data
+        Onde /dir/data é o diretorio do nosso pc, e o data caminho que estara os arquivos do container.
+        exemplo: docker run -d -p 81:80 --name phpmessages_container -v D:\Temp\Marcelo\Tutoriais\CURSOS\dockerCurso\dockerCourse\2_volumes\messages:/var/www/html/messages --rm phpmessages
+
+-> Bind Mount nao serve apenas para volumes
+    - pode-se utilizar para atualização em tempo real do projeto
+    - sem ter que refazer o build a cada atualização do memso
+    - exemplo:
+        docker run -d -p 81:80 --name phpmessages_container -v D:\Temp\Marcelo\Tutoriais\CURSOS\dockerCurso\dockerCourse\2_volumes\:/var/www/html/ --rm phpmessages
+        * Ao inves de colocar o caminho de onde sera salvo os arquivos, coloca-se o path da raiz do projeto e o WORKDIR.
+        * Dessa forma qualquer alteração em index.php ou outro arquivo é atualizado em tempo real sem necessidade de buildar
 
 
 --------------------------------------------------
