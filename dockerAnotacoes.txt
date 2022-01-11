@@ -139,5 +139,104 @@ Curso Docker
         * Ao inves de colocar o caminho de onde sera salvo os arquivos, coloca-se o path da raiz do projeto e o WORKDIR.
         * Dessa forma qualquer alteração em index.php ou outro arquivo é atualizado em tempo real sem necessidade de buildar
 
+-> Criar volume manualmente
+    - Utilizamos o comando: docker volume create <nome>
+    - Desta maneira temos um named volume criado, podemos atrelar a algum container na execução do mesmo
+    - docker volume ls
+        lista todos os volumes
+    - docker volume inspect nomeDoVolume
+        Checa/ Inspeciona um volume (nome, escopo e muito mais)
+    - docker volume rm nomeDoVolume
+        Remove volume (todos os dados gravados no volume serao perdidos), CUIDADO.
+    - docker volume prune
+        Remove volume que nao estao sendo utilizados
+    - docker run -v nomeDoVolume:/data:ro
+        :ro (read only) Volume apenas leitura, pouco usado
 
 --------------------------------------------------
+
+5 - Conectando container com "Networks"
+
+-> O que sao networks no docker
+    - Uma forma de gerenciar a conexao do docker  com outras plataformas e ate mesmo containers
+    - As redes sao criadas separadas dos containers, como os volumes
+    - Ha drivers, simplifica a comunicação entre containers
+
+-> Tipos de conexao
+    - Externa: conexao com  uma API de um servidor remoto
+    - Com o host: comunicação com a maquina que esta executando o docker
+    - Entre containers: comunicação que utiliza o driver BRIDGE e permite a comunicação entre dois ou mais containers
+
+-> Tipos de drivers (redes)
+    - Bridge: o mais comum e default do docker, utilizado quando containers precisam se conectar (na maioria das vezes optamos por este driver)
+    - host: permite a conexao entre um container a maquina que esta hosteando o docker;
+    - macvlan: permite a conexao a um container por um MAC address
+    - none: remove todas as conexoes de rede de um container
+    - plugins: permite extensoes de terceiros para criar outras redes
+
+-> Listando redes
+    - docker network ls
+    - Algumas redes ja vem listadas, fazem parte da conf inicial do docker
+
+-> Criando redes
+    - docker network create nomeDaRede (cria default como Bridge)
+    - Criando especificando o driver
+        * docker network create -d macvlan nomeDaRede onde:
+        -d: delimita o driver
+        macvlan: tipo do driver
+        nomeDaRede: nome do seu gosto 
+
+-> Removendo redes
+    - docker network rm nomeDaRede (tomar cuidado com containers ja conectados)
+    
+-> Removendo redes nao utilizadas
+    - docker network prune (todas as redes nao utilizadas no momento serao removidas)
+
+-> Conexao Externa
+    - Os containers podem se conectar livremente ao mundo externo
+    - um caso seria: uma API de codigo aberto
+    - podemos acessa-la livremente e utilizar seus dados
+    - Vamos testar (3_networks\1_externa)
+
+-> Conexao Com o host
+    - Podemos conectar un container com o host do docker
+    - HOST é a maquina que esta executando docker
+    - Como IP de host utilizamos: host.docker.internal
+    - No caso pode ser a nossa mesmo (3_networks\2_host)
+
+-> Conexao entre Containers
+    - Duas imagens distintas rodando em containers separados que precisam ser se conectar para inserir um dado no banco, por exemplo
+    - Vamos precisar de uma rede bridge para fazer esta conexao
+    - Agora nosso container de flask vai inserir dados em um MySQL que roda pelo Docker tambem
+    Exemplo:
+    * Criando rede
+    docker network create flasknetwork
+
+    * Buildando o mysql
+    docker build -t mysqlnetworkapi .
+    * Rodando container mysql
+    docker run -d -p 3307:3307 --name mysql_api_container --rm --network flasknetwork mysqlnetworkapi
+
+    * Buildando o flask
+    docker build -t flasknetwork .
+    * Rodando container flask
+    docker run -d -p 5000:5000 --name flask_api_container --rm --network flasknetwork flaskapinetwork
+
+    * OBSERVE QUE O "--network flasknetwork" que junta a rede com os containers mysql e flask
+
+-> Conexao de container a rede
+    - Podemos conectar um container a uma rede
+    - Vamos utilizar o comando  docker network connect nomeDaRede nomeDoContainer
+    - Apos o comando o container estara dentro da rede
+    exemplo:
+     docker network connect flask network 947dad15er45
+     docker inspect 947dad15er45 (ve a rede inserida)
+
+-> Desconectar container da rede
+    - docker network disconnect nomeDaRede nomeDoContainer
+
+-> Inspecionando redes
+    - Pode-se analisar dados de uma rede com: docker network inspect nomeDaRede (traz datacriacao, driver, nome e muito mais)
+
+
+
