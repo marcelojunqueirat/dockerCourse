@@ -1,6 +1,6 @@
 Curso Docker
 --------------------------------------------------
-3 - Imagens e Containeres
+1 - Imagens e Containeres
 
 -> docker container ls || docker ps
      - Lista os containers ativos, com "ls -a" lista todos ja executados
@@ -103,7 +103,7 @@ Curso Docker
 
 --------------------------------------------------
 
-4 - Volumes
+2 - Volumes
 
 -> Forma de persistir dados, vem para sanar problema de toda vez que remover um container com imagem, perder dados.
 
@@ -155,7 +155,7 @@ Curso Docker
 
 --------------------------------------------------
 
-5 - Conectando container com "Networks"
+3 - Conectando container com "Networks"
 
 -> O que sao networks no docker
     - Uma forma de gerenciar a conexao do docker  com outras plataformas e ate mesmo containers
@@ -237,6 +237,42 @@ Curso Docker
 
 -> Inspecionando redes
     - Pode-se analisar dados de uma rede com: docker network inspect nomeDaRede (traz datacriacao, driver, nome e muito mais)
+
+--------------------------------------------------
+
+4 - YAML
+
+-> O que é YAML?
+    - Uma linguagem de serialização , seu nome YAML ain't Markup Language (YAML não é uma linguagem de Marcação)
+    - Usada geralmente para arquivos de configuracao, inclusive do Docker para configurar o Docker Compose
+    - De facil leitura para humanos
+    - Extensao é yml ou yaml
+
+-> Espacamento e identacao
+    - o fim da linha indica fim da instrução (sem ponto e virgula)
+    - A identacao deve conter um ou mais espaços e nao conter TAB
+    - E cada linha define um novo bloco
+    - O espaco é obrigatorio apos a declaracao da chave
+
+--------------------------------------------------
+
+5 - Gerenciando multiplos containers com DOCKER Compose
+
+-> O que é o Docker Compose
+    - O docker compose é uma ferramenta para rodar multiplos containers
+    - teremos um unico arquivo de configuracao, que orquestra totalmente esta situacao
+    - é uma forma de rodar multiplos BUILDS e RUNS com um comando
+    - Em projetos maiores é essencial o uso do compose 
+
+-> Criando nosso primeiro arquivo compose
+    - Criamos um arquivo chamado docker-compose.yml
+    - Este arquivo vai coordenar os containers e imagens e possui algumas chaves muito utilizadas:
+    - version: versao do compose
+    - services: Containers/serviços que vao rodar nessa aplicacao
+    - volumes: possivel adicao de volumes
+
+
+
 
 
 
