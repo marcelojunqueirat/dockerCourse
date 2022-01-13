@@ -21,9 +21,9 @@ services:
     restart: always
     environment:
       WORDPRESS_DB_HOST: db:3306
-      WORDPRESS_DB_NAME: wordpress
       WORDPRESS_DB_USER: marcelo
       WORDPRESS_DB_PASSWORD: secret
+      WORDPRESS_DB_NAME: wordpress
 volumes:
   db_data: {}
 

@@ -271,6 +271,35 @@ Curso Docker
     - services: Containers/serviços que vao rodar nessa aplicacao
     - volumes: possivel adicao de volumes
 
+-> Rodando o compose
+    - Para rodar o compose utiliza o comnando: docker-compose up
+    - Isso fara com que as instruções nos arquivos sejam executadas
+    - Da mesma forma que realizamos os builds e tambem os runs
+    - Podemos parar o compose com ctrl+c no terminal
+
+-> Rodando o compose em background
+    - Pode ser rodado em modo detached
+    - Para isso vamos usar a flag -d no comando
+        docker-compose up -d
+    - E entao os containers estarao rodando em background
+    - Podemos ver sua execução com: docker ps
+
+-> Parando o compose
+    - docker-compose down
+    - Desta maneira o serviço para e temos os containers adicionados no docker ps -a
+
+-> Variaveis de ambiente no compose
+    - Pode-se definir variavel de ambiente para o compose
+    - Para isso vamos definir um arquivo base em env_file (db.env [exemplo])
+    - As variaveis podem ser chamadas pela sintaxe: ${VARIAVEL}
+    - Tecnica util para dado sensivel que nao pode ser compatilhado como senha por exemplo.
+    Exemplo:
+        env_file:
+        - ./config/db.env
+
+-> Redes no Compose
+    
+
 
 
 
