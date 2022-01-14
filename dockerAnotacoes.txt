@@ -298,10 +298,30 @@ Curso Docker
         - ./config/db.env
 
 -> Redes no Compose
-    
+    - O compose cria uma rede basica BRIDGE entre os containers da aplicacao
+    - Porem podemos isolar as redes com a chave network
+    - Desta forma podemos conectar apenas os containers que optamos
+    - E podemos definir driver diferentes tambem
 
+-> Incluindo projeto no compose
+    - Vamos inserir o projeto da ultima seção no compose
+    - Ver na pratica como fazer uma transferencia de DockerFiles para Docker-compose (5_compose\4_projeto)
+    lembar de buildar as imagens:
+        docker build -t flaskcompose .
+        docker build -t mysqlcompose .
+        docker-compose up -d
 
+-> Build no compose
+    - Podemos gerar o build durante o compose tambem
+    - Isso vai eliminar o processo  de gerar o build da imagem a cada atualização
 
+-> Bind Mount no compose
+    - o volume de Bind Mount garante a atualização em tempo real dos arquivos do container
+    - Podemos configurar nosso projeto de Compose para utilizar esta funcionalidade tambem
 
+-> Verficando o que tem no compose 
+    - Podemos fazer a verificacao do compose com: docker-compose ps
+    - Receberemos um resumo dos serviços que sobem ao rodar o compose
+    - Desta maneira podemos avaliar rapidamente o projeto
 
 
