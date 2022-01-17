@@ -324,4 +324,32 @@ Curso Docker
     - Receberemos um resumo dos serviços que sobem ao rodar o compose
     - Desta maneira podemos avaliar rapidamente o projeto
 
+--------------------------------------------------
 
+6 - Docker Swarm (ferramenta de orquestração de containers)
+
+-> O que é orquestração de containers?
+    - Orquestração é o ato de conseguir gerenciar e escalar os containers da nossa aplicação
+    - Temos um serviço que rege sobre outros serviços, verificando se os mesmos estao funcionando como deveriam
+    - Desta forma conseguimos garantir uma aplicação saudavel e tambem que esteja disponivel
+    - Alguns serviços: Docker Swarm, Kubernetes e Apache Mesos
+
+-> O que é Docker Swarm
+    - Uma ferramenta do Docker para orquestrar containers
+    - Podendo escalar horizontalmente nossos projetos de maneira simples
+    - O famoso cluster
+    - A facilidade do Swarm para outros orquestradores é que todos os comandos sao muito semelhantes ao do Docker
+    - Toda instalação do Docker ja vem com Swarm, porem desabilitado
+
+-> Conceitos fundamentais Swarm
+    - Nodes: é uma instancia de maquina que participa do swarm
+    - Manager Node: Node que gerencia os demais Nodes
+    - Worker Node: Nodes que trabalham em função do Manager
+    - Service: Um conjunto de Tasks que o manager Node manda o Work Node executar
+    - Task: Comandos que sao executados nos Nodes
+
+-> Maneiras de executar o Swarm
+    - Para exemplificar corretamente o Swarm, vmaos precisar de mais Nodes, ou seja, mais maquinas
+    - Entao temos duas soluções:
+        * AWS, criar a conta e rodar alguns servidores(precisa de cartao de credito mas é seguro)
+        * Docker Labs gratuito tambem, roda no navegador, porem expira a cada 4 horas.
