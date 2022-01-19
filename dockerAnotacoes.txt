@@ -353,3 +353,71 @@ Curso Docker
     - Entao temos duas soluções:
         * AWS, criar a conta e rodar alguns servidores(precisa de cartao de credito mas é seguro)
         * Docker Labs gratuito tambem, roda no navegador, porem expira a cada 4 horas.
+
+-> Swarm na AWS
+    - Criar conta na AWS
+    - Acessar serviço EC2 
+        * Instances running
+        * Launch Instance (Linux da amazom [padrao])
+        * config default (free)
+        * Criar a new key pair (chave publica e privada)
+        * clicar security group
+            > Inbound groups
+                > add 3 portas
+                    - 2377
+                    - 80
+                    - 22
+        * Para conectar, abrir a instancia, CONNECT -> EXAMPLE: tem o comando ssh de conexao.
+    - Instalar docker na instancia
+        * sudo yum update -y (atualizar todos os pacotes)
+        * sudo yum install docker (instala o docker)
+        * sudo service docker start (iniciar o docker)
+        * sudo usermod -a -G docker ec2-user (dando permissao do usuario no docker)
+        * sudo docker swarm init
+        * sudo docker swarm leave -faceis
+
+-> Swarm no Docker Labs
+    - logar em https://labs.play-with-docker.com/
+    - Add new Instance
+    - Iniciando Swarm
+        * docker swarm init
+        * Em alguns pede-se para declarar o ip: --advertise-addr
+        * Isso fara com que a instancia da maquina vire um Node
+        * E tambem transforma o Node em uma manager
+    - Listando Nodes ativos
+        * docker node ls
+        * pode-se monitorar o que o swarm esta gerenciando
+    - Adicionando novos Nodes (maquinas)
+        * docker swarm join --token <TOKEN> <IP>:<PORTA>
+        * Leader (manager), worker (maquinas filhas)
+    - Subindo um novo serviço (container) (apenas manager tem acesso)
+        * dokcer service create --name <nome> <imagem>
+        * desta forma teremos um container adicionado no container 
+        * e este serviço sera gerenciado pelo swarm
+    - Listando serviços (apenas manager tem acesso)
+        * docker service ls
+    - Removendo serviços (apenas manager tem acesso)
+        * docker service rm <nome>
+        * checamos remoçao com: docker service ls
+    - Replicando serviços
+        * dokcer service create --name <nome> --replicas <numero> <imagem>
+        * desta maneira uma task sera emitida, replicando este serviço nos workers
+        * AGORA INCIA-SE DE FATO A ORQUESTRAÇÃO
+        * Se o worker cai o ele orquesta a inicialização (garante que serviço esteja sempre disponivel)
+    - Checando o token do swarm
+        * docker swarm join-token manager
+    - Checando o swarm
+        * docker info
+    - Deixar o swarm em um Node (removendo instancia do swarm)
+        * docker swarm leave
+        * a partir desse momento a instancia nao é considerada como um Node para o swarm
+    - Remover um Node do swarm
+        * docker node rm <ID>
+        * a instancia nao é considerada como um Node para o swarm
+        * -f força remoção
+
+    
+
+
+
+
