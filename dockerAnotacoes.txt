@@ -415,8 +415,45 @@ Curso Docker
         * docker node rm <ID>
         * a instancia nao é considerada como um Node para o swarm
         * -f força remoção
+    - Inspecionando os serviços (roda no manager)
+        * docker service inspect <ID>
+        * Vamos receber informações de: nome, data de criação, portas e etc.
+    - Verificar containers ativados pelo service
+        * docker service ps <ID>
+        * recebe containers rodando e ja rodados
+        * semelhante ao docker ps -a 
+    - Rodando Compose com Swarm
+        * docker stack deploy -c <ARQUIVO.YAML> <NOME>
+        * Teremos entao o arquivo compose sendo executado
+        * Agora pode-se utilizar os Nodes como replicas
+    - Escalando aplicação (Aumentando replicas do Stack)
+        * docker service scale <NOME>=<REPLICAS>
+        * Desta formas as outras maquinas receberão as tasks a serem executadas
+    - Parar de receber tasks em um Node
+        * docker node update --availability drain <ID>
+        * O status de drain é que nao recebe tasks
+        * Podemos voltar para "active" que volta a receber
+    - Atualizar Parametro de um serviço
+        * Podemos atualizar as configurações dos nossos nodes
+        * docker service update --image <IMAGEM> <SERVICO>
+        * Desta forma apenas os nodes que estao "active" receberao atualizações
+    - Criando rede para Swarm
+        * A conexao entre instancias usa um driver diferente, o "overlay"
+        * Podemos criar primeiramente a rede com : docker network create (docker network create --driver overlay swarm )
+        * E depois ao criar um service adicionar a flag --network <REDE> para inserir as instancias na nossa nova rede
+    - Conectar serviço a uma rede
+        * docker service update --network <REDE> <NOME>
+        * Checa-se com o inspect 
 
+
+-> Kubernetes
     
+
+
+
+
+
+
 
 
 
