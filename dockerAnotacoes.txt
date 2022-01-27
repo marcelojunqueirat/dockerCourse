@@ -449,7 +449,115 @@ Curso Docker
 -> Kubernetes
     
     - O que é Kubernetes
-
-
-
-
+        * Uma ferramenta de orquestração de containers
+        * Permite a criação de multiplos containers em diferentes maquinas(nodes)
+        * Escalando projetos, formando um cluster
+        * Gerencia serviços, garantindo que as aplicações sejam executadas sempre da mesma forma
+        * Criada pelo Google
+    - Conceitos Fundamentais
+        * Control Plane: Onde é gerenciado o controle dos processos dos Nodes
+        * Nodes: Maquinas que sao gerenciadas pelo Control Plane
+        * Deployment: A execução de uma imagem/projeto em um Pod
+        * Pod: um ou mais containers que estao em um Node
+        * Services: Serviços que expoe os Pods ao mundo externo
+        * kubectl: Cliente de linha de comando para o Kubernetes
+    - Dependencias Necessarias
+        * O Kubernetes pode ser executado de uma maneira simples em nossa maquina
+        * Precisa-se do client, kubectl, que é a maneira de executar o Kubernetes
+        * E tambem o Minikube, uma especie de simulador de Kubernetes, para nao precisarmos de varios computadores/servidores
+    - Kubernetes no Windows
+        * Instalar gerenciador de pacotes "chocolatey"
+        * Seguir documentacao de install do client de Kubernetes
+        * Instalar o VirtualBox (nao é necessario se tem Hyper-V ou o Docker Instalado)
+        * Instalar o Minikube
+    - Iniciando o Minikube
+        * Para inicializar o Minikube vamos utilizar o comando: minikube start --driver=<DRIVER>
+        * Onde o driver vai depender de como foi sua instalação das Dependencias, e por qualquer um deles atingiremos os mesmos resultados
+        * Voce pode tentar> virtualbox, hyperv e docker
+        * Podemos testar o minikube com: minikube status
+    - Parando o Minikube
+        * Obs: Sempre que o computador for reiniciado, devemos iniciar o minikube
+        * Paramos com o comando: minikube stop
+        * Para iniciar novamente: minikube start --driver=<DRIVER>
+    - Acessando a dashboard do Kubernetes
+        * O Minikube nos disponibiliza uma dashboard
+        * Nela podemos ver todo o detalhamento de nosso projeto: serviços, pods e etc
+        * Acessamos com o comando: minikube dashboard
+        * Ou para apenas obter a url: minikube dashboard --url
+    - Deployment teoria
+        * O Deployment é uma parte Fundamental do Kubernetes
+        * Com ele criamos nosso serviço que vai rodar nos Pods
+        * Definimos uma imagem e um nome, para posteriormente ser replicado entre os servidores
+        * A partir da criação do Deployment teremos containers rodando
+        * Vamos precisar de uma imagem no Docker Hub, para gerar um deployment
+    - Project (Do)
+        * Pequeno projeto em Flask
+        * Buildar a imagem do mesmo
+        * Enviar a imagem para o Docker hub
+        * testar rodar em um container
+        * Este projeto sera utilizado no Kubernetes
+    - Criando Deployment
+        * é onde rodamos os containers das aplicações nos Podss
+        * O comando é: kubectl create deployment <NOME> --image=<IMAGEM>
+    - Verificando Deployments
+        * Para verificar o Deployment utiliza: kubectl get deployments
+        * Para saber mais detalhes: kubectl describe deployments
+    - Checando Pods
+        * Pods sao importantes, sao onde os containers realmente sao executados
+        * Para verificar os Pods utilizamos: kubectl get pods
+        * Para saber mais detalhes: kubectl describe pods
+    - Configuracoes do Kubernetes
+        * comando: kubectl config view
+    - Services na teoria
+        * As aplicações Kubernetes nao tem conexao com o mundo externo
+        * Por isso precisa-se criar um Service, que é o que possibilita expor os PODS
+        * Isso acontece pois os Pods sao criados para serem destruidos e perderem tudo, ou seja os dados gerados neles tambem serao apagados
+        * Entao o Service é uma entidade separada dos Pods, que expoe eles a uma rede
+    - Criando Nosso service
+        * comando: kubectl expose deployment <NOME> --type=<TIPO> --port=<PORT>
+        * Tipo de SERVICE, ha varios o LoadBalancer é o mais comum, onde todos os Pods sao expostos
+        * E uma porta para o serviço ser consumido
+    - Gerando um IP para o service
+        * Para acessar o nosso serviço: minikube service <NOME>
+        * Desta forma o IP aparece no nosso terminal
+        * Abre-se uma aba no navegador com o projeto tb
+        * Pronto, temos um projeto rodando pelo Kubernetes
+    - Detalhes dos services
+        * Ver serviços: kubectl get services
+        * Detalhes do serviço: kubectl describe services/<NOME>
+    - Escalando a Aplicação
+        * kubectl scale deployment/<NOME> --replicas=<NUMERO>
+        * No dashboard ou com kubectl get pods, consegue ver o aumento de pods
+    - Verificando numero de replicas
+        * comando: kubectl get rs
+    - Diminuir numero de replicas
+        * scale down
+        * kubectl scale deployment/<NOME> --replicas=<NUMERO_MENOR>
+    - Atualizar imagem
+        * kubectl set image deployment/<NOME> <NOME_CONTAINER>=<NOVA_IMAGEM>
+    - Desfazer alteração de projeto
+        * verificar alteração: kubectl rollout status deployment/<NOME>
+        * Para dar o rollback: kubectl rollout undo deployment/<NOME>
+    - Deletando Serviços
+        * kubectl delete service <NOME>
+    - Deletando Deployments
+        * kubectl delete deployment <NOME>
+    - Modo Declarativo
+        * Modo imperativo é quando iniciamos a aplicação com comandos
+        * O modo declarativo é guiado por um arquivo semalhante ao Docker Compose
+        * Deste forma configura-se de uma vez só e centralizamos tudo em um comando
+        * escreve-se em YAML
+    - Chaves mais utilizadas
+        * apiVersion: Versao utilizada da ferramenta
+        * kind: tipo do arquivo (Deployment, Service)
+        * metadata: descrever algum objeto, inserindo chaves como name
+        * replicas: numero de replicas de Nodes/Pods
+        * containers: definir as especificações de containers como nome e imagem
+    - Executando arquivo de deployment/ service
+        * kubectl apply -f <ARQUIVO>
+        * o deployment/ service sera criado conforme configuracao no arquivo YAML
+    - Parando o deployment / service
+        * kubectl delete -f <ARQUIVO>
+        * Deployment: Pods excluidos e serviços finalizados
+        * Service: Serviços nao mais disponivel perda de acesso ao projeto
+        
